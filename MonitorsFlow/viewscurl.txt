@@ -1,0 +1,338 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MonitorsFour - Networking Solutions</title>
+  <link href="static/css/plugins.css" rel="stylesheet">
+  <link href="static/css/style.css" rel="stylesheet">
+  <link rel="shortcut icon" type="image/x-icon" href="/static/admin/assets/images/logo.ico">
+</head>
+<body>
+  <!-- Pre Loader -->
+
+  <!-- Navigation Start -->
+  <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-header navbar-mobile">
+    <div class="navbar-container container">
+
+      <div class="navbar-brand">
+        <a class="navbar-brand-logo" href="#top">
+          <img src="static/admin/assets/images/logo.png" style="width:200px; margin-right:-50px;" alt="logo">
+        </a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+        <ul class="navbar-nav menu-navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#top"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about-us"><i class="far fa-user-circle"></i> About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#services"><i class="fas fa-wifi"></i> Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pricing"><i class="fas fa-tag"></i> Pricing</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link learn-more-btn" href="/login">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Navigation End -->
+
+  <!-- Banner Start -->
+  <div id="top" class="header">
+    <div class="container header-container">
+      <div class="d-none d-lg-block col-lg-6 header-img-section">
+        <img src="static/images/banner.svg" class="img-fluid" alt="banner">
+      </div>
+      <div class="col-lg-5 offset-lg-1 col-sm-12 header-title-section">
+        <p class="header-subtitle">MonitorsFour Provides</p>
+        <h1 class="header-title">The Best Networking Solutions</h1>
+        <p class="header-title-text">At MonitorsFour, we specialize in providing top-tier networking solutions tailored to your business needs. Whether you're looking to enhance your network infrastructure, improve security, or ensure seamless connectivity, our team of experts is here to help you achieve your goals.</p>
+        <div class="learn-more-btn-section">
+          <a class="nav-link learn-more-btn btn-invert" href="#services">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Banner End -->
+
+  <!-- About us Start -->
+  <section id="about-us" class="aboutus-section">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-lg-6">
+          <p class="section-small-heading">About Us</p>
+          <h2 class="section-heading">Empowering Your Network Infrastructure</h2>
+          <p class="section-para">MonitorsFour is dedicated to delivering reliable, secure, and scalable networking solutions. Our mission is to empower businesses with the tools they need to stay connected and secure in a rapidly evolving digital landscape.</p>
+          <ul class="list">
+            <li>Advanced Network Solutions</li>
+            <li>Comprehensive Security Appliances and Firewalls</li>
+            <li>Real-time Network Monitoring</li>
+            <li>Cutting-edge Wireless Services</li>
+            <li>Efficient Routing and Switching</li>
+          </ul>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+          <div class="section-img-right">
+            <img src="static/images/about-us.svg" alt="about">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- About us End -->
+
+  <!-- services Start -->
+  <section id="services" class="services-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 d-none d-lg-block">
+          <div class="section-img-left">
+            <img src="static/images/service.svg" alt="services">
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="row">
+            <div class="col-lg-12">
+              <p class="section-small-heading">Our Services</p>
+              <h2 class="section-heading">Customized Solutions for Your Business</h2>
+              <p class="section-para">Our services are designed to meet the unique demands of your business, ensuring that your network is always performing at its best. From installation to maintenance, we've got you covered.</p>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="service-box">
+                <div class="service-icon">
+                  <img src="static/images/services/01.png" style="margin-left:-17.5px; margin-top:7" alt="icon">
+                </div>
+                <div class="service-text">
+                  <h3 class="service-heading">Network <span>Monitoring</span></h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="service-box">
+                <div class="service-icon">
+                  <img src="static/images/services/02.png" style="margin-left:-17.5px; margin-top:7" alt="icon">
+                </div>
+                <div class="service-text">
+                  <h3 class="service-heading">Routing <span>Switching</span></h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="service-box">
+                <div class="service-icon">
+                  <img src="static/images/services/03.png" style="margin-left:-17.5px; margin-top:7" alt="icon">
+                </div>
+                <div class="service-text">
+                  <h3 class="service-heading">Wireless <span>Services</span></h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="service-box">
+                <div class="service-icon">
+                  <img src="static/images/services/04.png" style="margin-left:-17.5px; margin-top:7" alt="icon">
+                </div>
+                <div class="service-text">
+                  <h3 class="service-heading">Security <span>Firewalls</span></h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- services End -->
+
+  <!-- Client Logos Start-->
+  <section class="cta-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="cta-box">
+          <h3 class="cta-section-heading">MonitorsFour Provides The Best Networking Management Solutions!</h3>      
+        </div>      
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Client Logos End-->
+
+  <!-- Pricing Start-->
+  <section id="pricing" class="pricing-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p class="section-small-heading">Pricing</p>
+          <h2 class="section-heading">Flexible Pricing Plans</h2>
+          <p class="section-para">We offer a range of pricing plans tailored to fit the needs of businesses of all sizes. Choose the plan that's right for you and enjoy premium networking services at competitive rates.</p>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-lg-4 col-sm-12">
+          <div class="pricing-box">
+            <div class="pricing-text">
+              <h3 class="pricing-heading">Start</h3>
+              <h3 class="pricing-cost">£1000 <span>/Month</span></h3>
+              <ul class="list">
+                <li>Basic Network Solutions</li>
+                <li>Essential Security Features</li>
+                <li>Standard Network Monitoring</li>
+                <li>Basic Wireless Services</li>
+                <li>Routing and Switching Support</li>
+              </ul>
+            </div>
+          </div>
+        </div>   
+        <div class="col-lg-4 col-sm-12">
+          <div class="pricing-box featured">
+            <div class="pricing-text">
+              <h3 class="pricing-heading">Pro</h3>
+              <h3 class="pricing-cost">£1500 <span>/Month</span></h3>
+              <ul class="list">
+                <li>Advanced Network Solutions</li>
+                <li>Enhanced Security Appliances</li>
+                <li>Comprehensive Network Monitoring</li>
+                <li>Premium Wireless Services</li>
+                <li>Advanced Routing and Switching</li>
+              </ul>
+            </div>
+          </div>
+        </div> 
+        <div class="col-lg-4 col-sm-12">
+          <div class="pricing-box">
+            <div class="pricing-text">
+              <h3 class="pricing-heading">Premium</h3>
+              <h3 class="pricing-cost">£3000 <span>/Month</span></h3>
+              <ul class="list">
+                <li>Enterprise Network Solutions</li>
+                <li>Full Security Suite and Firewalls</li>
+                <li>Real-time Network Monitoring</li>
+                <li>Comprehensive Wireless Services</li>
+                <li>Expert Routing and Switching</li>
+              </ul>
+            </div>
+          </div>
+        </div>      
+      </div>
+
+    </div>
+  </section>
+  <!--Pricing End-->
+  
+  <!-- reviews Start -->
+  <section id="reviews" class="contact-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p class="section-small-heading">Reviews</p>
+          <h2 class="section-heading">What Our Clients Say</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-7">
+          <div class="owl-carousel owl-loaded owl-drag">
+            <div class="review-item">
+              <div class="review-details"><i class="fas fa-quote-left"></i> MonitorsFour completely transformed our network infrastructure. Their team was professional, knowledgeable, and responsive to our needs. Highly recommend their services!</div>
+              <div class="review-author">
+                <span class="review-name">Nicola Johnson</span>
+                <span class="review-desig">(IT Manager, TechCorp)</span>
+              </div>
+            </div>
+            <div class="review-item">
+              <div class="review-details"><i class="fas fa-quote-left"></i> We were facing frequent network outages before switching to MonitorsFour. Their network monitoring service has been a game changer for our business operations.</div>
+              <div class="review-author">
+                <span class="review-name">Glenn Jones</span>
+                <span class="review-desig">(CEO, BizSolutions)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+          <img src="static/images/review.svg" class="img-fluid" alt="review">
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- reviews End -->
+
+  <!-- footer Start -->
+  <section class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-widget">
+            <img src="static/admin/assets/images/logo.png" style="width:70%;" alt="logo">
+            <p class="mt-4">MonitorsFour is committed to providing exceptional networking solutions that help businesses achieve their goals with confidence and security.</p>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-2">
+        </div>
+        <div class="col-lg-3 col-md-3">
+          <div class="footer-widget">
+            <h5>Quick Links</h5>
+            <ul>
+              <li><a href="#services"><i class="fas fa-angle-right"></i> Services</a></li>
+              <li><a href="#about-us"><i class="fas fa-angle-right"></i> About Us</a></li>
+              <li><a href="#pricing"><i class="fas fa-angle-right"></i> Pricing</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3">
+          <div class="footer-widget">
+            <h5>Address</h5>
+            <p class="mt-3">
+              <i class="fas fa-map-marker-alt"></i> 2269 Elba Lane<br>
+              Harlow<br>
+              London<br>
+              United Kingdom<br>
+              888-555-2311<br>
+              sales@monitorsfour.htb</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="footer-copyright">
+            © 2025 MonitorsFour All Rights Reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- footer End -->
+
+  <!-- jQuery Min JS -->
+  <script src="static/js/jquery-min.js"></script>
+
+  <!-- Popper Min JS -->
+  <script src="static/js/popper.min.js"></script>
+  <!-- Bootstrap Min JS -->
+  <script src="static/js/bootstrap.min.js"></script>
+  <!-- Owl Carousel Min JS -->
+  <script src="static/js/owl.carousel.min.js"></script>
+  <!-- Owl Plugins JS -->
+  <script src="static/js/plugins.js"></script>
+  <!-- Smooth scroll JS -->
+  <script src="static/js/smoothscroll.js"></script>
+
+
+  <!-- Custom JS -->
+  <script src="static/js/custom.js"></script>
+
+  <a id="scrollUp" href="#top" style="position: fixed; z-index: 2147483647; display: none;"><i class="fas fa-chevron-up"></i></a>
+</body>
+</html>

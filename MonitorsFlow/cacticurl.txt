@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5' name='viewport'>
+	<meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'>
+	<meta name='apple-mobile-web-app-capable' content='yes'>
+	<meta name='description' content='Monitoring tool of the Internet'>
+	<meta name='mobile-web-app-capable' content='yes'>
+	<meta name="theme-color" content="#161616"/>
+	<meta http-equiv="Content-Security-Policy" content="default-src *; img-src 'self'  data: blob:; style-src 'self' 'unsafe-inline' ; script-src 'self'  'unsafe-inline' ; worker-src 'self' ;">
+	<meta name='robots' content='noindex,nofollow'>
+	<title>Login to Cacti</title>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<script type='text/javascript'>
+		var theme='modern';
+		var hScroll=false;
+		var userSettings=false;
+		var tableConstraints='Allow or limit the table columns to extend beyond the current windows limits.';
+		var searchFilter='Enter a search term';
+		var searchRFilter='Enter a regular expression';
+		var noFileSelected='No file selected';
+		var timeGraphView='Time Graph View';
+		var filterSettingsSaved='Filter Settings Saved';
+		var spikeKillResults='SpikeKill Results';
+		var utilityView='Utility View';
+		var realtimeClickOn='Click to view just this Graph in Realtime';
+		var realtimeClickOff='Click again to take this Graph out of Realtime';
+		var treeView='Tree View';
+		var listView='List View';
+		var previewView='Preview View';
+		var editProfile='Edit Profile';
+		var cactiConsoleAllowed=false;
+		var cactiGraphsAllowed=false;
+		var changePassword='Change Password';
+		var logout='Logout';
+		var standardGraphicalUserInterface='Standard Mode';
+		var compactGraphicalUserInterface='Compact Mode';
+		var darkColorMode='Dark Color Mode';
+		var lightColorMode='Light Color Mode';
+		var usePreferredColorTheme='Use System Color';
+		var ignorePreferredColorTheme='Ignore System Color';
+		var help='Help';
+		var cactiHome='Cacti Home';
+		var cactiConsole='Console';
+		var cactiMisc='Miscellaneous';
+		var cactiDashboards='Dashboards';
+		var cactiGeneral='General';
+		var cactiCharts='Charts';
+		var cactiProjectPage='Cacti Project Page';
+		var cactiCommunityForum='User Community';
+		var cactiUser='User';
+		var cactiDocumentation='Documentation';
+		var cactiSpine='Spine';
+		var cactiRRDProxy='RRDProxy';
+		var cactiKeyboard='Keyboard';
+		var cactiShortcuts='Shortcuts';
+		var cactiContributeTo='Contribute to the Cacti Project';
+		var cactiDevHelp='Help in Developing';
+		var cactiDonate='Donation &amp; Sponsoring';
+		var cactiProfile='Profile';
+		var cactiTheme='Theme';
+		var cactiClient='Client';
+		var cactiTranslate='Help in Translating';
+		var reportABug='Report a bug';
+		var aboutCacti='About Cacti';
+		var justCacti='Cacti';
+		var spikeKillResults='SpikeKill Results';
+		var showHideFilter='Click to Show/Hide Filter';
+		var clearFilterTitle='Clear Current Filter';
+		var clipboard='Clipboard';
+		var clipboardID='Clipboard ID';
+		var clipboardNotAvailable='Copy operation is unavailable at this time';
+		var clipboardCopyFailed='Failed to find data to copy!';
+		var clipboardUpdated='Clipboard has been updated';
+		var clipboardNotUpdated='Sorry, your clipboard could not be updated at this time';
+		var defaultSNMPSecurityLevel='authPriv';
+		var defaultSNMPAuthProtocol='MD5';
+		var defaultSNMPPrivProtocol='DES';
+		var passwordPass='Passphrase length meets 8 character minimum';
+		var passwordTooShort='Passphrase too short';
+		var passwordMatchTooShort='Passphrase matches but too short';
+		var passwordNotMatchTooShort='Passphrase too short and not matching';
+		var passwordMatch='Passphrases match';
+		var passwordNotMatch='Passphrases do not match';
+		var errorOnPage='Sorry, we could not process your last action.';
+		var errorNumberPrefix='Error:';
+		var errorReasonPrefix='Reason:';
+		var errorReasonTitle='Action failed';
+		var testSuccessful='Connection Successful';
+		var testFailed='Connection Failed';
+		var errorReasonUnexpected='The response to the last action was unexpected.';
+		var mixedReasonTitle='Some Actions failed';
+		var mixedOnPage='Note, we could not process all your actions.  Details are below.';
+		var sessionMessageTitle='Operation successful';
+		var sessionMessageSave='The Operation was successful.  Details are below.';
+		var sessionMessageOk='Ok';
+		var sessionMessagePause='Pause';
+		var sessionMessageContinue='Continue';
+		var sessionMessageCancel='Cancel';
+		var zoom_i18n_zoom_in='Zoom In';
+		var zoom_i18n_zoom_out='Zoom Out';
+		var zoom_i18n_zoom_out_factor='Zoom Out Factor';
+		var zoom_i18n_timestamps='Timestamps';
+		var zoom_i18n_zoom_2='2x';
+		var zoom_i18n_zoom_4='4x';
+		var zoom_i18n_zoom_8='8x';
+		var zoom_i18n_zoom_16='16x';
+		var zoom_i18n_zoom_32='32x';
+		var zoom_i18n_zoom_out_positioning='Zoom Out Positioning';
+		var zoom_i18n_mode='Zoom Mode';
+		var zoom_i18n_graph='Graph';
+		var zoom_i18n_quick='Quick';
+		var zoom_i18n_advanced='Advanced';
+		var zoom_i18n_newTab='Open in new tab';
+		var zoom_i18n_save_graph='Save graph';
+		var zoom_i18n_copy_graph='Copy graph';
+		var zoom_i18n_copy_graph_link='Copy graph link';
+		var zoom_i18n_on='Always On';
+		var zoom_i18n_auto='Auto';
+		var zoom_i18n_off='Always Off';
+		var zoom_i18n_begin='Begin with';
+		var zoom_i18n_center='Center';
+		var zoom_i18n_end='End with';
+		var zoom_i18n_disabled='Disabled';
+		var zoom_i18n_close='Close';
+		var zoom_i18n_settings='Settings';
+		var zoom_i18n_3rd_button='3rd Mouse Button';
+	</script>
+	<link href='/cacti/include/themes/modern/images/favicon.ico' rel='shortcut icon'>
+	<link href='/cacti/include/themes/modern/images/cacti_logo.gif' rel='icon' sizes='96x96'>
+	<link href='/cacti/include/themes/modern/jquery.zoom.css?aca45860e0c75f2c485ddfc17160d597' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/jquery-ui.css?a51f0bd06d47bdcf4d6563ca44ac7c6d' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/default/style.css?bfe1c8d80ca469731f471745268ea146' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/jquery.multiselect.css?f83e570ae998a2a6f7b07f850c58ce8b' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/jquery.multiselect.filter.css?bdc527651975f5ccfb3fd6f91af0bb93' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/jquery.timepicker.css?431ab7d4ef48afd9c39a647c5c990b0a' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/jquery.colorpicker.css?24366e47db1fb3b58658a53d9a445214' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/billboard.css?695c0029bc6c0f91e299c84485669130' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/pace.css?cca67d465b4ea3986786a0679604a367' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/Diff.css?49e6953c7461abf91ec4e7346d34bd85' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/fa/css/all.css?02e393dfbbce98f9ae76cddc7ea21e52' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/vendor/flag-icons/css/flag-icons.css?ab806eafe572d8149eb3dba8d0283db7' type='text/css' rel='stylesheet'>
+<link href='/cacti/include/themes/modern/main.css?89dc22c5a1bc9af4ae7b7ae5e9d6e4d1' type='text/css' rel='stylesheet'>
+<script type='text/javascript' src='/cacti/include/js/screenfull.js?60a2ad1d452950179fa4d2c5d1b5dee4' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.js?d16de7de202afe54100a95dea1d4b134'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery-ui.js?bb9963f8eb6cb3e33d6f59112ddb2231'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.ui.touch.punch.js?4195aad6f616651c00557e84c6721646' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.cookie.js?0b804d4f90de70b032a9986b22165b75'></script>
+<script type='text/javascript' src='/cacti/include/js/js.storage.js?32df3a56e44d570b7e3177d71e892214'></script>
+<script type='text/javascript' src='/cacti/include/js/jstree.js?5d3a3b5f68b0163175e5630a5e8a3a66'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.hotkeys.js?fbf82bcab286e9fc5cdf863eb067230f' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.tablednd.js?a33b14ebf8ce2abf7911e62cbc19e0c5' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.zoom.js?a4dcf91fed1e4be77b91d1569f4802dc' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.multiselect.js?0fe69963a69cd6e5c87eb380112912bb'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.multiselect.filter.js?ccf700b33985626742e26c6707028bed'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.timepicker.js?f29132ab24085f909242175ad11cfcbc'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.colorpicker.js?3b7032780b24b9b48050e5d245a36260' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.tablesorter.js?8d331985e11cfc65649a915073cb30ed'></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.tablesorter.widgets.js?3cc0d7b3426e1db1e4a099db18b17e3c' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.tablesorter.pager.js?8ca32d30195c98492cd028f582f07c8c' async></script>
+<script type='text/javascript' src='/cacti/include/js/jquery.sparkline.js?c7638b825bc7deb1cf58c990825d35b2' async></script>
+<script type='text/javascript' src='/cacti/include/js/Chart.js?3367829189a65fe699f677e0e4605499' async></script>
+<script type='text/javascript' src='/cacti/include/js/dygraph-combined.js?b5b448f71f8c3eb4a39506299bd81b0c' async></script>
+<script type='text/javascript' src='/cacti/include/js/d3.js?90b69efc9897253561ab62038cd15692'></script>
+<script type='text/javascript' src='/cacti/include/js/billboard.js?9e6056e4dff4d132adc417d1b60c4af5'></script>
+<script type='text/javascript' src='/cacti/include/layout.js?666a6d4acff74d80292c7cce8bb1f138'></script>
+<script type='text/javascript' src='/cacti/include/js/pace.js?0232dc2b5854db23a93fd46af0f3bff7'></script>
+<script type='text/javascript' src='/cacti/include/js/purify.js?a99712dc2d4399aff979d801bfe65383'></script>
+<script type='text/javascript' src='/cacti/include/realtime.js?487d4e7f58ab491e660fe5209f67eb81'></script>
+<script type='text/javascript' src='/cacti/include/themes/modern/main.js?0eb4f9ce093f3c37be9e898793037ccc'></script>
+<script type="text/javascript">if (top != self) {top.location.href = self.location.href;}</script><script type="text/javascript">var csrfMagicToken = "sid:ac4eb8f1a4433ef6f80e4a58eb2b09110401ecde,1765508967;ip:3d4ff8534072f9bc176c0c202cac22d991449124,1765508967";var csrfMagicName = "__csrf_magic";</script><script src="/cacti/include/vendor/csrf/csrf-magic.js" type="text/javascript"></script></head>
+<body class='loginBody'>
+	<div class='loginLeft'></div>
+	<div class='loginCenter'>
+	<div class='loginArea'>
+		<div class='cactiLoginLogo'></div>
+			<legend>User Login</legend>
+			<form id='login' name='login' method='post' action='index.php'><input type='hidden' name='__csrf_magic' value="sid:ac4eb8f1a4433ef6f80e4a58eb2b09110401ecde,1765508967;ip:3d4ff8534072f9bc176c0c202cac22d991449124,1765508967" />
+				<input type='hidden' name='action' value='login'>
+								<div class='loginTitle'>
+					<p>Enter your Username and Password below</p>
+				</div>
+				<div class='cactiLogin'>
+					<table class='cactiLoginTable'>
+						<tr>
+							<td>
+								<label for='login_username'>Username</label>
+							</td>
+							<td>
+								<input type='text' class='ui-state-default ui-corner-all' id='login_username' name='login_username' value='' placeholder='Username'>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for='login_password'>Password</label>
+							</td>
+							<td>
+								<input type='password' autocomplete='new-password' class='ui-state-default ui-corner-all' id='login_password' name='login_password' placeholder='********'>
+							</td>
+						</tr>
+												<tr>
+							<td colspan='2'>
+								<input style='vertical-align:-3px;' type='checkbox' id='remember_me' name='remember_me' >
+								<label for='remember_me'>Keep me signed in</label>
+							</td>
+						</tr>
+											<tr>
+							<td colspan='2'>
+								<input type='submit' class='ui-button ui-corner-all ui-widget' value='Login'>
+							</td>
+						</tr>
+					</table>
+				</div>
+						</form>
+			<div class='loginErrors'>
+							</div>
+		</div>
+		<div class='versionInfo'>Version 1.2.28 | (c) 2004-2025 - The Cacti Group</div>
+	</div>
+	<div class='loginRight'></div>
+	<script type='text/javascript'>
+	var storage = Storages.localStorage;
+
+	$(function() {
+		if (storage.isSet('user_realm')) {
+			var preferredRealm = storage.get('user_realm');
+		} else {
+			var preferredRealm = null;
+		}
+
+		if (preferredRealm == null) {
+			preferredRealm = $('#realm option:selected').val();
+		}
+
+		// Restore the preferred realm
+		if ($('#realm').length) {
+			if (preferredRealm !== null) {
+				$('#realm').val(preferredRealm);
+				if ($('#realm').selectmenu('instance') !== undefined) {
+					$('#realm').selectmenu('refresh');
+				}
+			}
+		}
+
+		// Control submit in order to store preferred realm
+		$('#login').submit(function(event) {
+			event.preventDefault();
+			if ($('#realm').length) {
+				storage.set('user_realm', $('#realm').val());
+			}
+			$('#login').off('submit').trigger('submit');
+		});
+
+		$('body').css('height', $(window).height());
+		$('.loginLeft').css('width',parseInt($(window).width()*0.33)+'px');
+		$('.loginRight').css('width',parseInt($(window).width()*0.33)+'px');
+		$('#login_username').focus();
+	});
+	</script>
+	<script type='text/javascript'>
+	var cactiVersion='1.2.28';
+	var cactiServerOS='unix';
+	var cactiAction='';
+	var theme='modern';
+	var refreshIsLogout=true;
+	var refreshPage='/cacti/logout.php?action=timeout';
+	var refreshMSeconds=1440000;
+	var urlPath='/cacti/';
+	var previousPage='';
+	var sessionMessage=[];
+	var csrfMagicToken='sid:ac4eb8f1a4433ef6f80e4a58eb2b09110401ecde,1765508967;ip:3d4ff8534072f9bc176c0c202cac22d991449124,1765508967';
+</script>
+<script type="text/javascript">CsrfMagic.end();</script></body>
+</html>
